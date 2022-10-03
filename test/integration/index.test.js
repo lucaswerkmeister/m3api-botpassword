@@ -1,6 +1,8 @@
 /* eslint-env mocha */
 
+import Session, { set } from 'm3api/node.js';
 import {
+	login,
 } from '../../index.js';
 import chai, { expect } from 'chai';
 import chaiAsPromised from 'chai-as-promised';
@@ -8,6 +10,8 @@ import fs from 'fs';
 import process from 'process';
 
 chai.use( chaiAsPromised );
+
+const userAgent = 'm3api-botpassword-integration-tests (https://github.com/lucaswerkmeister/m3api-botpassword/)';
 
 describe( 'm3api-botpassword', function () {
 
@@ -62,8 +66,23 @@ describe( 'm3api-botpassword', function () {
 		}
 	} );
 
-	it( 'will be removed once real functionality exists', async () => {
-		expect( 2 + 2 ).to.equal( 4 );
+	it( 'login, userinfo', async function () {
+		if ( !mediawikiUsername || !mediawikiPassword ) {
+			return this.skip();
+		}
+		const session = new Session( 'en.wikipedia.beta.wmflabs.org', {
+			formatversion: 2,
+		}, {
+			userAgent,
+		} );
+		const { name, id } = await login( session, mediawikiUsername, mediawikiPassword );
+		expect( name ).to.equal( mediawikiUsername.replace( /@.*$/, '' ) );
+		const userInfo = ( await session.request( {
+			action: 'query',
+			meta: set( 'userinfo' ),
+			uiprop: set(),
+		} ) ).query.userinfo;
+		expect( { name, id } ).to.eql( userInfo );
 	} );
 
 } );
