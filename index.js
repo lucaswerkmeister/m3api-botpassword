@@ -1,3 +1,7 @@
+import {
+	DEFAULT_OPTIONS,
+} from 'm3api/core.js';
+
 /**
  * @typedef UserInfo
  * @type {Object}
@@ -6,17 +10,54 @@
  */
 
 /**
+ * Request options understood by this package.
+ * All other options will be passed through to m3api.
+ *
+ * It’s strongly recommended to use the same options for {@link #login} and {@link #logout},
+ * typically by including them in the session’s defaultOptions at construction time.
+ * Using different options, especially logging in with an option set to true
+ * and then logging out with it set to false,
+ * will likely result in all future requests failing with an 'assertuserfailed' error.
+ *
+ * @typedef Options
+ * @type {Object}
+ * @property {boolean} ['m3api-botpassword/assert']
+ * Whether to set the 'assert' parameter in the session’s defaultParams,
+ * to 'user' ({@link #login}) or 'anon' ({@link #logout}) respectively.
+ * Defaults to true.
+ * @property {boolean} ['m3api-botpassword/assertuser']
+ * Whether to set ({@link #login}) or delete ({@link #logout})
+ * the 'assertuser' parameter in the session’s defaultParams.
+ * Defaults to false.
+ */
+
+Object.assign( DEFAULT_OPTIONS, {
+	'm3api-botpassword/assert': true,
+	'm3api-botpassword/assertuser': false,
+} );
+
+/**
  * Log in using the given username and password.
  *
  * @param {Session} session The m3api session to which the login applies.
  * @param {string} username
  * @param {string} password
- * @param {Object} [options] Options for the requests.
+ * @param {Options} [options] Options for the requests,
+ * including custom options for this package (see the type documentation).
  * @return {UserInfo} Object with name and id members.
  * (The name may be different from the given username,
  * if that included the bot password name.)
  */
 async function login( session, username, password, options = {} ) {
+	const {
+		'm3api-botpassword/assert': assert,
+		'm3api-botpassword/assertuser': assertuser,
+	} = {
+		...DEFAULT_OPTIONS,
+		...session.defaultOptions,
+		...options,
+	};
+
 	const response = await session.request( {
 		action: 'login',
 		lgname: username,
@@ -27,11 +68,23 @@ async function login( session, username, password, options = {} ) {
 		tokenType: 'login',
 		tokenName: 'lgtoken',
 	} );
+	const {
+		lgusername: name,
+		lguserid: id,
+	} = response.login;
+
 	session.tokens.clear();
-	session.defaultParams.assert = 'user';
+
+	if ( assert ) {
+		session.defaultParams.assert = 'user';
+	}
+	if ( assertuser ) {
+		session.defaultParams.assertuser = name;
+	}
+
 	return {
-		name: response.login.lgusername,
-		id: response.login.lguserid,
+		name,
+		id,
 	};
 }
 
@@ -43,6 +96,15 @@ async function login( session, username, password, options = {} ) {
  * @return {Object} Empty object.
  */
 async function logout( session, options = {} ) {
+	const {
+		'm3api-botpassword/assert': assert,
+		'm3api-botpassword/assertuser': assertuser,
+	} = {
+		...DEFAULT_OPTIONS,
+		...session.defaultOptions,
+		...options,
+	};
+
 	await session.request( {
 		action: 'logout',
 	}, {
@@ -51,9 +113,16 @@ async function logout( session, options = {} ) {
 		tokenType: 'csrf',
 		tokenName: 'token',
 	} );
+
 	session.tokens.clear();
-	session.defaultParams.assert = 'anon';
-	delete session.defaultParams.assertuser;
+
+	if ( assert ) {
+		session.defaultParams.assert = 'anon';
+	}
+	if ( assertuser ) {
+		delete session.defaultParams.assertuser;
+	}
+
 	return {};
 }
 

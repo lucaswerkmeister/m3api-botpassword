@@ -11,20 +11,21 @@ chai.use( chaiAsPromised );
 
 class BaseTestSession extends Session {
 
-	constructor() {
-		super( 'en.wikipedia.org', {}, {
+	constructor( defaultParams = {}, defaultOptions = {} ) {
+		super( 'en.wikipedia.org', defaultParams, {
 			warn() {
 				throw new Error( 'warn() should not be called in this test' );
 			},
 			userAgent: 'm3api-botpassword-unit-test',
+			...defaultOptions,
 		} );
 	}
 
 	async request() {
 		return { login: {
 			result: 'Success',
-			lguserid: 0,
-			lgusername: '',
+			lguserid: 1234,
+			lgusername: 'username',
 		} };
 	}
 
@@ -84,10 +85,33 @@ describe( 'login', () => {
 		expect( session.tokens ).to.be.empty;
 	} );
 
-	it( 'adds assert to defaultParams', async () => {
+	it( 'adds assert but not assertuser to defaultParams', async () => {
 		const session = new BaseTestSession();
 		await login( session, 'username', 'password' );
 		expect( session.defaultParams ).to.have.property( 'assert', 'user' );
+		expect( session.defaultParams ).not.to.have.property( 'assertuser' );
+	} );
+
+	[
+		[ 'defaultOptions', { 'm3api-botpassword/assert': false }, {} ],
+		[ 'options', {}, { 'm3api-botpassword/assert': false } ],
+	].forEach( ( [ name, defaultOptions, options ] ) => {
+		it( `does not add assert to defaultParams with false in ${name}`, async () => {
+			const session = new BaseTestSession( {}, defaultOptions );
+			await login( session, 'username', 'password', options );
+			expect( session.defaultParams ).not.to.have.property( 'assert' );
+		} );
+	} );
+
+	[
+		[ 'defaultOptions', { 'm3api-botpassword/assertuser': true }, {} ],
+		[ 'options', {}, { 'm3api-botpassword/assertuser': true } ],
+	].forEach( ( [ name, defaultOptions, options ] ) => {
+		it( `adds assertuser to defaultParams with true in ${name}`, async () => {
+			const session = new BaseTestSession( {}, defaultOptions );
+			await login( session, 'username', 'password', options );
+			expect( session.defaultParams ).to.have.property( 'assertuser', 'username' );
+		} );
 	} );
 
 } );
@@ -137,12 +161,34 @@ describe( 'logout', () => {
 		expect( session.tokens ).to.be.empty;
 	} );
 
-	it( 'adds assert to and removes assertuser from defaultParams', async () => {
+	it( 'adds assert to, does not remove assertuser from defaultParams', async () => {
 		const session = new BaseTestSession();
 		session.defaultParams.assertuser = 'username';
 		await logout( session );
 		expect( session.defaultParams ).to.have.property( 'assert', 'anon' );
-		expect( session.defaultParams ).not.to.have.property( 'assertuser' );
+		expect( session.defaultParams ).to.have.property( 'assertuser', 'username' );
+	} );
+
+	[
+		[ 'defaultOptions', { 'm3api-botpassword/assert': false }, {} ],
+		[ 'options', {}, { 'm3api-botpassword/assert': false } ],
+	].forEach( ( [ name, defaultOptions, options ] ) => {
+		it( `does not add assert to defaultParams with false in ${name}`, async () => {
+			const session = new BaseTestSession( {}, defaultOptions );
+			await logout( session, options );
+			expect( session.defaultParams ).not.to.have.property( 'assert' );
+		} );
+	} );
+
+	[
+		[ 'defaultOptions', { 'm3api-botpassword/assertuser': true }, {} ],
+		[ 'options', {}, { 'm3api-botpassword/assertuser': true } ],
+	].forEach( ( [ name, defaultOptions, options ] ) => {
+		it( `removes assertuser from defaultParams with true in ${name}`, async () => {
+			const session = new BaseTestSession( {}, defaultOptions );
+			await logout( session, options );
+			expect( session.defaultParams ).not.to.have.property( 'assertuser' );
+		} );
 	} );
 
 } );
