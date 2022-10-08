@@ -3,6 +3,7 @@
 import Session, { set } from 'm3api/node.js';
 import {
 	login,
+	logout,
 } from '../../index.js';
 import chai, { expect } from 'chai';
 import chaiAsPromised from 'chai-as-promised';
@@ -66,7 +67,7 @@ describe( 'm3api-botpassword', function () {
 		}
 	} );
 
-	it( 'login, userinfo', async function () {
+	it( 'login, userinfo, logout, userinfo', async function () {
 		if ( !mediawikiUsername || !mediawikiPassword ) {
 			return this.skip();
 		}
@@ -75,14 +76,25 @@ describe( 'm3api-botpassword', function () {
 		}, {
 			userAgent,
 		} );
-		const { name, id } = await login( session, mediawikiUsername, mediawikiPassword );
-		expect( name ).to.equal( mediawikiUsername.replace( /@.*$/, '' ) );
-		const userInfo = ( await session.request( {
+		const userinfoParams = {
 			action: 'query',
 			meta: set( 'userinfo' ),
 			uiprop: set(),
-		} ) ).query.userinfo;
-		expect( { name, id } ).to.eql( userInfo );
+		};
+
+		const { name, id } = await login( session, mediawikiUsername, mediawikiPassword );
+		expect( name ).to.equal( mediawikiUsername.replace( /@.*$/, '' ) );
+
+		const loggedInUserInfo = ( await session.request( userinfoParams ) )
+			.query.userinfo;
+		expect( { name, id } ).to.eql( loggedInUserInfo );
+
+		await logout( session );
+
+		const loggedOutUserInfo = ( await session.request( userinfoParams ) )
+			.query.userinfo;
+		expect( loggedOutUserInfo ).to.have.property( 'anon', true );
+		expect( loggedOutUserInfo.id ).to.equal( 0 );
 	} );
 
 } );

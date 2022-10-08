@@ -3,6 +3,7 @@
 import { Session } from 'm3api/core.js';
 import {
 	login,
+	logout,
 } from '../../index.js';
 import chai, { expect } from 'chai';
 import chaiAsPromised from 'chai-as-promised';
@@ -87,6 +88,61 @@ describe( 'login', () => {
 		const session = new BaseTestSession();
 		await login( session, 'username', 'password' );
 		expect( session.defaultParams ).to.have.property( 'assert', 'user' );
+	} );
+
+} );
+
+describe( 'logout', () => {
+
+	it( 'makes right request', async () => {
+		let called = false;
+		class TestSession extends BaseTestSession {
+			async request( requestParams, requestOptions ) {
+				expect( called, 'request already called' ).to.be.false;
+				called = true;
+				expect( requestParams ).to.eql( {
+					action: 'logout',
+				} );
+				expect( requestOptions ).to.eql( {
+					method: 'POST',
+					tokenType: 'csrf',
+					tokenName: 'token',
+					maxRetriesSeconds: 10,
+				} );
+				return {};
+			}
+		}
+
+		const options = {
+			method: 'GET', // should be overridden
+			tokenType: 'login', // should be overridden
+			tokenName: 'lgtoken', // should be overridden
+			maxRetriesSeconds: 10, // should be kept
+		};
+		const session = new TestSession();
+		expect( await logout( session, options ) ).to.eql( {} );
+		expect( options, 'original options modified' ).to.eql( {
+			method: 'GET',
+			tokenType: 'login',
+			tokenName: 'lgtoken',
+			maxRetriesSeconds: 10,
+		} );
+		expect( called ).to.be.true;
+	} );
+
+	it( 'clears existing tokens', async () => {
+		const session = new BaseTestSession();
+		session.tokens.set( 'xyz', 'XYZ' );
+		await logout( session );
+		expect( session.tokens ).to.be.empty;
+	} );
+
+	it( 'adds assert to and removes assertuser from defaultParams', async () => {
+		const session = new BaseTestSession();
+		session.defaultParams.assertuser = 'username';
+		await logout( session );
+		expect( session.defaultParams ).to.have.property( 'assert', 'anon' );
+		expect( session.defaultParams ).not.to.have.property( 'assertuser' );
 	} );
 
 } );

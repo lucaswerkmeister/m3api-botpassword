@@ -35,6 +35,29 @@ async function login( session, username, password, options = {} ) {
 	};
 }
 
+/**
+ * Log out of the session.
+ *
+ * @param {Session} session The m3api session to which the logout applies.
+ * @param {Object} [options] Options for the requests.
+ * @return {Object} Empty object.
+ */
+async function logout( session, options = {} ) {
+	await session.request( {
+		action: 'logout',
+	}, {
+		...options,
+		method: 'POST',
+		tokenType: 'csrf',
+		tokenName: 'token',
+	} );
+	session.tokens.clear();
+	session.defaultParams.assert = 'anon';
+	delete session.defaultParams.assertuser;
+	return {};
+}
+
 export {
 	login,
+	logout,
 };
