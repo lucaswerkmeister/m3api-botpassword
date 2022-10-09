@@ -10,6 +10,9 @@
 	],
 	"rules": {
 		"comma-dangle": [ "error", "always-multiline" ],
+		"no-unused-vars": [ "error", {
+			"varsIgnorePattern": "^_"
+		} ],
 		"jsdoc/no-undefined-types": [ "error", {
 			"definedTypes": [ "Session" ]
 		} ]

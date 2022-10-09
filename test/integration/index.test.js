@@ -85,8 +85,11 @@ describe( 'm3api-botpassword', function () {
 		const { name, id } = await login( session, mediawikiUsername, mediawikiPassword );
 		expect( name ).to.equal( mediawikiUsername.replace( /@.*$/, '' ) );
 
-		const loggedInUserInfo = ( await session.request( userinfoParams ) )
-			.query.userinfo;
+		const [ loggedInResponse, _ ] = await Promise.all( [
+			session.request( userinfoParams ),
+			session.getToken( 'csrf' ), // prefetch for logout (combined)
+		] );
+		const loggedInUserInfo = loggedInResponse.query.userinfo;
 		expect( { name, id } ).to.eql( loggedInUserInfo );
 
 		await logout( session );
