@@ -2,6 +2,7 @@
 /.env
 
 # additional exclusions irrelevant for published packages
+/.eslintrc.json
 /.github/
-/test/
 /RELEASE.md
+/test/
