@@ -104,8 +104,8 @@ describe( 'login', () => {
 	} );
 
 	[
-		[ 'defaultOptions', { 'm3api-botpassword/assertuser': true }, {} ],
-		[ 'options', {}, { 'm3api-botpassword/assertuser': true } ],
+		[ 'defaultOptions', { 'm3api-botpassword/assertUser': true }, {} ],
+		[ 'options', {}, { 'm3api-botpassword/assertUser': true } ],
 	].forEach( ( [ name, defaultOptions, options ] ) => {
 		it( `adds assertuser to defaultParams with true in ${name}`, async () => {
 			const session = new BaseTestSession( {}, defaultOptions );
@@ -181,8 +181,8 @@ describe( 'logout', () => {
 	} );
 
 	[
-		[ 'defaultOptions', { 'm3api-botpassword/assertuser': true }, {} ],
-		[ 'options', {}, { 'm3api-botpassword/assertuser': true } ],
+		[ 'defaultOptions', { 'm3api-botpassword/assertUser': true }, {} ],
+		[ 'options', {}, { 'm3api-botpassword/assertUser': true } ],
 	].forEach( ( [ name, defaultOptions, options ] ) => {
 		it( `removes assertuser from defaultParams with true in ${name}`, async () => {
 			const session = new BaseTestSession( {}, defaultOptions );

@@ -25,7 +25,7 @@ import {
  * Whether to set the 'assert' parameter in the session’s defaultParams,
  * to 'user' ({@link #login}) or 'anon' ({@link #logout}) respectively.
  * Defaults to true.
- * @property {boolean} ['m3api-botpassword/assertuser']
+ * @property {boolean} ['m3api-botpassword/assertUser']
  * Whether to set ({@link #login}) or delete ({@link #logout})
  * the 'assertuser' parameter in the session’s defaultParams.
  * Defaults to false.
@@ -33,7 +33,7 @@ import {
 
 Object.assign( DEFAULT_OPTIONS, {
 	'm3api-botpassword/assert': true,
-	'm3api-botpassword/assertuser': false,
+	'm3api-botpassword/assertUser': false,
 } );
 
 /**
@@ -51,7 +51,7 @@ Object.assign( DEFAULT_OPTIONS, {
 async function login( session, username, password, options = {} ) {
 	const {
 		'm3api-botpassword/assert': assert,
-		'm3api-botpassword/assertuser': assertuser,
+		'm3api-botpassword/assertUser': assertUser,
 	} = {
 		...DEFAULT_OPTIONS,
 		...session.defaultOptions,
@@ -78,7 +78,7 @@ async function login( session, username, password, options = {} ) {
 	if ( assert ) {
 		session.defaultParams.assert = 'user';
 	}
-	if ( assertuser ) {
+	if ( assertUser ) {
 		session.defaultParams.assertuser = name;
 	}
 
@@ -98,7 +98,7 @@ async function login( session, username, password, options = {} ) {
 async function logout( session, options = {} ) {
 	const {
 		'm3api-botpassword/assert': assert,
-		'm3api-botpassword/assertuser': assertuser,
+		'm3api-botpassword/assertUser': assertUser,
 	} = {
 		...DEFAULT_OPTIONS,
 		...session.defaultOptions,
@@ -119,7 +119,7 @@ async function logout( session, options = {} ) {
 	if ( assert ) {
 		session.defaultParams.assert = 'anon';
 	}
-	if ( assertuser ) {
+	if ( assertUser ) {
 		delete session.defaultParams.assertuser;
 	}
 

@@ -46,7 +46,7 @@ const session = new Session( 'en.wikipedia.org', {
 }, {
 	userAgent: 'm3api-botpassword-README-example',
 	'm3api-botpassword/assert': true, // default
-	'm3api-botpassword/assertuser': true, // also add assertuser=[username]
+	'm3api-botpassword/assertUser': true, // also add assertuser=[username]
 } );
 ```
 
@@ -54,7 +54,7 @@ Request options can also be specified after the other `login()`/`logout()` argum
 i.e. `login( session, username, password, options )` and `logout( session, options )`.
 This can be useful for the m3api options,
 but is not recommended for m3api-botpassword options:
-using different `assert`/`assertuser` options for login and logout
+using different `assert`/`assertUser` options for login and logout
 will most likely produce confusing errors.
 
 ## License
