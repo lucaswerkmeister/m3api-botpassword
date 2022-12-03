@@ -24,5 +24,8 @@
 				"comma-dangle": "off"
 			}
 		}
+	],
+	"ignorePatterns": [
+		"/doc/"
 	]
 }
