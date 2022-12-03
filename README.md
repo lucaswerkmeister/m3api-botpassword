@@ -1,4 +1,6 @@
 # m3api-botpassword
+[![npm](https://img.shields.io/npm/v/m3api-botpassword.svg)](https://www.npmjs.com/package/m3api-botpassword)
+[![documentation](https://img.shields.io/badge/documentation-informational)](https://lucaswerkmeister.github.io/m3api-botpassword/)
 
 m3api-botpassword is an extension package for [m3api][],
 making it easy to make requests authenticated by a [bot password][].
