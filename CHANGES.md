@@ -7,7 +7,7 @@ but this file may sometimes contain later improvements (e.g. typo fixes).
 
 ## next (not yet released)
 
-No changes yet.
+- Updated dependencies.
 
 ## v0.1.0 (2022-10-29)
 
