@@ -4,6 +4,7 @@ import Session, { set } from 'm3api/node.js';
 import {
 	login,
 	logout,
+	LoginError,
 } from '../../index.js';
 import chai, { expect } from 'chai';
 import chaiAsPromised from 'chai-as-promised';
@@ -98,6 +99,20 @@ describe( 'm3api-botpassword', function () {
 			.query.userinfo;
 		expect( loggedOutUserInfo ).to.have.property( 'anon', true );
 		expect( loggedOutUserInfo.id ).to.equal( 0 );
+	} );
+
+	it( 'login with invalid credentials', async function () {
+		if ( !mediawikiUsername ) {
+			return this.skip();
+		}
+		const session = new Session( 'en.wikipedia.beta.wmflabs.org', {
+			formatversion: 2,
+		}, {
+			userAgent,
+		} );
+
+		await expect( login( session, mediawikiUsername, '' ) )
+			.to.be.rejectedWith( LoginError );
 	} );
 
 } );

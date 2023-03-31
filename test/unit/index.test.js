@@ -4,6 +4,7 @@ import { Session } from 'm3api/core.js';
 import {
 	login,
 	logout,
+	LoginError,
 } from '../../index.js';
 import chai, { expect } from 'chai';
 import chaiAsPromised from 'chai-as-promised';
@@ -112,6 +113,26 @@ describe( 'login', () => {
 			await login( session, 'username', 'password', options );
 			expect( session.defaultParams ).to.have.property( 'assertuser', 'username' );
 		} );
+	} );
+
+	it( 'detects failure', async () => {
+		class TestSession extends BaseTestSession {
+			async request() {
+				return {
+					login: {
+						result: 'Failed',
+						reason: 'Incorrect username or password entered. Please try again.',
+					},
+				};
+			}
+		}
+
+		const session = new TestSession();
+		const error = await expect( login( session, 'username', 'password' ) )
+			.to.be.rejectedWith( LoginError, 'Unable to log in as username (Failed): Incorrect username or password entered. Please try again.' );
+		expect( error.result ).to.equal( 'Failed' );
+		expect( error.reason ).to.equal( 'Incorrect username or password entered. Please try again.' );
+		expect( error.username ).to.equal( 'username' );
 	} );
 
 } );

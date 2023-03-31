@@ -7,6 +7,10 @@ but this file may sometimes contain later improvements (e.g. typo fixes).
 
 ## next (not yet released)
 
+- `login()` now detects if logging in failed,
+  and throws a `LoginError` in that case.
+  (This new class is also exported,
+  in case you want to check for it specifically.)
 - Updated dependencies.
 
 ## v0.1.1 (2022-12-03)

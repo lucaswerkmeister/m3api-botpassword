@@ -37,6 +37,52 @@ Object.assign( DEFAULT_OPTIONS, {
 } );
 
 /**
+ * An error indicating that login failed.
+ */
+class LoginError extends Error {
+
+	/**
+	 * @param {string} result From the API response.
+	 * @param {string|undefined} reason From the API response.
+	 * @param {string} username From the login() parameters.
+	 * @param {...*} params Any other params for the Error constructor,
+	 * not including the message.
+	 */
+	constructor( result, reason, username, ...params ) {
+		super( `Unable to log in as ${username} (${result}): ${reason}`, ...params );
+
+		if ( Error.captureStackTrace ) {
+			Error.captureStackTrace( this, LoginError );
+		}
+
+		this.name = 'LoginError';
+
+		/**
+		 * The result the API returned (probably 'Failed').
+		 *
+		 * @member {string}
+		 */
+		this.result = result;
+
+		/**
+		 * The reason the API returned (a message, possibly localized).
+		 * (Can in theory be missing/undefined, but this is not expected.)
+		 *
+		 * @member {string|undefined}
+		 */
+		this.reason = reason;
+
+		/**
+		 * The user name with which we tried to log in.
+		 *
+		 * @member {string}
+		 */
+		this.username = username;
+	}
+
+}
+
+/**
  * Log in using the given username and password.
  *
  * @param {Session} session The m3api session to which the login applies.
@@ -69,9 +115,15 @@ async function login( session, username, password, options = {} ) {
 		tokenName: 'lgtoken',
 	} );
 	const {
+		result,
+		reason,
 		lgusername: name,
 		lguserid: id,
 	} = response.login;
+
+	if ( result !== 'Success' ) {
+		throw new LoginError( result, reason, username );
+	}
 
 	session.tokens.clear();
 
@@ -129,4 +181,5 @@ async function logout( session, options = {} ) {
 export {
 	login,
 	logout,
+	LoginError,
 };
