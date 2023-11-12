@@ -11,6 +11,7 @@ but this file may sometimes contain later improvements (e.g. typo fixes).
   that the `reason` returned by the API in case of failed login
   can be an object rather than a string
   (if the session’s `defaultParams` specify a non-default `errorformat`).
+- Updated dependencies.
 
 ## v0.2.0 (2023-07-10)
 
