@@ -5,7 +5,7 @@ This file records the changes in each m3api-botpassword release.
 The annotated tag (and GitHub release) for each version also lists the changes,
 but this file may sometimes contain later improvements (e.g. typo fixes).
 
-## next (not yet released)
+## v0.2.1 (2023-11-12)
 
 - `login()` and `LoginError` now understand
   that the `reason` returned by the API in case of failed login
