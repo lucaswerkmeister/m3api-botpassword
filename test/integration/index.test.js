@@ -101,7 +101,7 @@ describe( 'm3api-botpassword', function () {
 		expect( loggedOutUserInfo.id ).to.equal( 0 );
 	} );
 
-	it( 'login with invalid credentials', async function () {
+	it( 'login with invalid credentials (default errorformat)', async function () {
 		if ( !mediawikiUsername ) {
 			return this.skip();
 		}
@@ -112,7 +112,26 @@ describe( 'm3api-botpassword', function () {
 		} );
 
 		await expect( login( session, mediawikiUsername, '' ) )
-			.to.be.rejectedWith( LoginError );
+			.to.be.rejectedWith( LoginError )
+			.and.eventually.to.have.property( 'reason' )
+			.that.is.a( 'string' );
+	} );
+
+	it( 'login with invalid credentials (errorformat=none)', async function () {
+		if ( !mediawikiUsername ) {
+			return this.skip();
+		}
+		const session = new Session( 'en.wikipedia.beta.wmflabs.org', {
+			formatversion: 2,
+			errorformat: 'none',
+		}, {
+			userAgent,
+		} );
+
+		await expect( login( session, mediawikiUsername, '' ) )
+			.to.be.rejectedWith( LoginError )
+			.and.eventually.to.have.property( 'reason' )
+			.that.has.property( 'code' );
 	} );
 
 } );

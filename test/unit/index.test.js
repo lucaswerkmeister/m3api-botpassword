@@ -115,24 +115,40 @@ describe( 'login', () => {
 		} );
 	} );
 
-	it( 'detects failure', async () => {
-		class TestSession extends BaseTestSession {
-			async request() {
-				return {
-					login: {
-						result: 'Failed',
-						reason: 'Incorrect username or password entered. Please try again.',
-					},
-				};
+	[
+		{
+			errorformat: 'bc',
+			reason: 'Incorrect username or password entered. Please try again.',
+			expectedMessage: 'Unable to log in as username (Failed): Incorrect username or password entered. Please try again.',
+		},
+		{
+			errorformat: 'plaintext',
+			reason: {
+				code: 'wrongpassword',
+				text: 'Incorrect username or password entered. Please try again.',
+			},
+			expectedMessage: 'Unable to log in as username (Failed): wrongpassword',
+		},
+	].forEach( ( { errorformat, reason, expectedMessage } ) => {
+		it( `detects failure for errorformat=${errorformat}`, async () => {
+			class TestSession extends BaseTestSession {
+				async request() {
+					return {
+						login: {
+							result: 'Failed',
+							reason,
+						},
+					};
+				}
 			}
-		}
 
-		const session = new TestSession();
-		const error = await expect( login( session, 'username', 'password' ) )
-			.to.be.rejectedWith( LoginError, 'Unable to log in as username (Failed): Incorrect username or password entered. Please try again.' );
-		expect( error.result ).to.equal( 'Failed' );
-		expect( error.reason ).to.equal( 'Incorrect username or password entered. Please try again.' );
-		expect( error.username ).to.equal( 'username' );
+			const session = new TestSession();
+			const error = await expect( login( session, 'username', 'password' ) )
+				.to.be.rejectedWith( LoginError, expectedMessage );
+			expect( error.result ).to.equal( 'Failed' );
+			expect( error.reason ).to.equal( reason );
+			expect( error.username ).to.equal( 'username' );
+		} );
 	} );
 
 } );

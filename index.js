@@ -43,13 +43,13 @@ class LoginError extends Error {
 
 	/**
 	 * @param {string} result From the API response.
-	 * @param {string|undefined} reason From the API response.
+	 * @param {string|object|undefined} reason From the API response.
 	 * @param {string} username From the login() parameters.
 	 * @param {...*} params Any other params for the Error constructor,
 	 * not including the message.
 	 */
 	constructor( result, reason, username, ...params ) {
-		super( `Unable to log in as ${username} (${result}): ${reason}`, ...params );
+		super( `Unable to log in as ${username} (${result}): ${reason.code || reason}`, ...params );
 
 		if ( Error.captureStackTrace ) {
 			Error.captureStackTrace( this, LoginError );
@@ -65,10 +65,12 @@ class LoginError extends Error {
 		this.result = result;
 
 		/**
-		 * The reason the API returned (a message, possibly localized).
+		 * The reason the API returned:
+		 * a string message, or an object with string code and optionally other members,
+		 * depending on the errorformat (if any) in the session’s defaultParams.
 		 * (Can in theory be missing/undefined, but this is not expected.)
 		 *
-		 * @member {string|undefined}
+		 * @member {string|object|undefined}
 		 */
 		this.reason = reason;
 
