@@ -15,7 +15,7 @@
 	"bugs": "https://github.com/lucaswerkmeister/m3api-botpassword/issues",
 	"repository": {
 		"type": "git",
-		"url": "https://github.com/lucaswerkmeister/m3api-botpassword.git"
+		"url": "git+https://github.com/lucaswerkmeister/m3api-botpassword.git"
 	},
 	"keywords": [
 		"mediawiki"
