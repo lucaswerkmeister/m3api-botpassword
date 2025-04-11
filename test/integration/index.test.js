@@ -6,12 +6,12 @@ import {
 	logout,
 	LoginError,
 } from '../../index.js';
-import chai, { expect } from 'chai';
+import { expect, use } from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 import fs from 'fs';
 import process from 'process';
 
-chai.use( chaiAsPromised );
+use( chaiAsPromised );
 
 const userAgent = 'm3api-botpassword-integration-tests (https://github.com/lucaswerkmeister/m3api-botpassword/)';
 
