@@ -46,7 +46,7 @@ describe( 'm3api-botpassword', function () {
 
 				const match = line.match( /^([^=]*)='([^']*)'$/ );
 				if ( !match ) {
-					console.warn( `.env: ignoring bad format: ${line}` );
+					console.warn( `.env: ignoring bad format: ${ line }` );
 					continue;
 				}
 				switch ( match[ 1 ] ) {
@@ -61,7 +61,7 @@ describe( 'm3api-botpassword', function () {
 						}
 						break;
 					default:
-						console.warn( `.env: ignoring unknown assignment: ${line}` );
+						console.warn( `.env: ignoring unknown assignment: ${ line }` );
 						break;
 				}
 			}

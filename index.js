@@ -49,7 +49,7 @@ class LoginError extends Error {
 	 * not including the message.
 	 */
 	constructor( result, reason, username, ...params ) {
-		super( `Unable to log in as ${username} (${result}): ${reason.code || reason}`, ...params );
+		super( `Unable to log in as ${ username } (${ result }): ${ reason.code || reason }`, ...params );
 
 		if ( Error.captureStackTrace ) {
 			Error.captureStackTrace( this, LoginError );

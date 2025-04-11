@@ -97,7 +97,7 @@ describe( 'login', () => {
 		[ 'defaultOptions', { 'm3api-botpassword/assert': false }, {} ],
 		[ 'options', {}, { 'm3api-botpassword/assert': false } ],
 	].forEach( ( [ name, defaultOptions, options ] ) => {
-		it( `does not add assert to defaultParams with false in ${name}`, async () => {
+		it( `does not add assert to defaultParams with false in ${ name }`, async () => {
 			const session = new BaseTestSession( {}, defaultOptions );
 			await login( session, 'username', 'password', options );
 			expect( session.defaultParams ).not.to.have.property( 'assert' );
@@ -108,7 +108,7 @@ describe( 'login', () => {
 		[ 'defaultOptions', { 'm3api-botpassword/assertUser': true }, {} ],
 		[ 'options', {}, { 'm3api-botpassword/assertUser': true } ],
 	].forEach( ( [ name, defaultOptions, options ] ) => {
-		it( `adds assertuser to defaultParams with true in ${name}`, async () => {
+		it( `adds assertuser to defaultParams with true in ${ name }`, async () => {
 			const session = new BaseTestSession( {}, defaultOptions );
 			await login( session, 'username', 'password', options );
 			expect( session.defaultParams ).to.have.property( 'assertuser', 'username' );
@@ -130,7 +130,7 @@ describe( 'login', () => {
 			expectedMessage: 'Unable to log in as username (Failed): wrongpassword',
 		},
 	].forEach( ( { errorformat, reason, expectedMessage } ) => {
-		it( `detects failure for errorformat=${errorformat}`, async () => {
+		it( `detects failure for errorformat=${ errorformat }`, async () => {
 			class TestSession extends BaseTestSession {
 				async request() {
 					return {
@@ -210,7 +210,7 @@ describe( 'logout', () => {
 		[ 'defaultOptions', { 'm3api-botpassword/assert': false }, {} ],
 		[ 'options', {}, { 'm3api-botpassword/assert': false } ],
 	].forEach( ( [ name, defaultOptions, options ] ) => {
-		it( `does not add assert to defaultParams with false in ${name}`, async () => {
+		it( `does not add assert to defaultParams with false in ${ name }`, async () => {
 			const session = new BaseTestSession( {}, defaultOptions );
 			await logout( session, options );
 			expect( session.defaultParams ).not.to.have.property( 'assert' );
@@ -221,7 +221,7 @@ describe( 'logout', () => {
 		[ 'defaultOptions', { 'm3api-botpassword/assertUser': true }, {} ],
 		[ 'options', {}, { 'm3api-botpassword/assertUser': true } ],
 	].forEach( ( [ name, defaultOptions, options ] ) => {
-		it( `removes assertuser from defaultParams with true in ${name}`, async () => {
+		it( `removes assertuser from defaultParams with true in ${ name }`, async () => {
 			const session = new BaseTestSession( {}, defaultOptions );
 			await logout( session, options );
 			expect( session.defaultParams ).not.to.have.property( 'assertuser' );
