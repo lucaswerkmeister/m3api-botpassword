@@ -5,6 +5,10 @@ This file records the changes in each m3api-botpassword release.
 The annotated tag (and GitHub release) for each version also lists the changes,
 but this file may sometimes contain later improvements (e.g. typo fixes).
 
+## next (not yet released)
+
+No changes yet.
+
 ## v0.2.2 (2025-04-11)
 
 - Declared compatibility with m3api v0.9.0.
