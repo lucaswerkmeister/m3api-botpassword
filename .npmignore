@@ -4,6 +4,6 @@
 
 # additional exclusions irrelevant for published packages
 /.eslintrc.json
-/.github/
+/.gitlab-ci.yml
 /RELEASE.md
 /test/

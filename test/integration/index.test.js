@@ -13,7 +13,7 @@ import process from 'process';
 
 use( chaiAsPromised );
 
-const userAgent = 'm3api-botpassword-integration-tests (https://github.com/lucaswerkmeister/m3api-botpassword/)';
+const userAgent = 'm3api-botpassword-integration-tests (https://phabricator.wikimedia.org/tag/m3api/)';
 
 describe( 'm3api-botpassword', function () {
 

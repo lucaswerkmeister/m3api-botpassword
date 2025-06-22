@@ -11,11 +11,11 @@
 		"test:integration": "mocha test/integration/",
 		"doc": "jsdoc -c jsdoc/conf.json"
 	},
-	"homepage": "https://github.com/lucaswerkmeister/m3api-botpassword#readme",
-	"bugs": "https://github.com/lucaswerkmeister/m3api-botpassword/issues",
+	"homepage": "https://gitlab.wikimedia.org/repos/m3api/m3api-botpassword/#m3api-botpassword",
+	"bugs": "https://phabricator.wikimedia.org/tag/m3api/",
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/lucaswerkmeister/m3api-botpassword.git"
+		"url": "git+https://gitlab.wikimedia.org/repos/m3api/m3api-botpassword.git"
 	},
 	"keywords": [
 		"mediawiki"
