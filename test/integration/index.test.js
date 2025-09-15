@@ -72,7 +72,7 @@ describe( 'm3api-botpassword', function () {
 		if ( !mediawikiUsername || !mediawikiPassword ) {
 			return this.skip();
 		}
-		const session = new Session( 'en.wikipedia.beta.wmflabs.org', {
+		const session = new Session( 'en.wikipedia.beta.wmcloud.org', {
 			formatversion: 2,
 		}, {
 			userAgent,
@@ -105,7 +105,7 @@ describe( 'm3api-botpassword', function () {
 		if ( !mediawikiUsername ) {
 			return this.skip();
 		}
-		const session = new Session( 'en.wikipedia.beta.wmflabs.org', {
+		const session = new Session( 'en.wikipedia.beta.wmcloud.org', {
 			formatversion: 2,
 		}, {
 			userAgent,
@@ -121,7 +121,7 @@ describe( 'm3api-botpassword', function () {
 		if ( !mediawikiUsername ) {
 			return this.skip();
 		}
-		const session = new Session( 'en.wikipedia.beta.wmflabs.org', {
+		const session = new Session( 'en.wikipedia.beta.wmcloud.org', {
 			formatversion: 2,
 			errorformat: 'none',
 		}, {
