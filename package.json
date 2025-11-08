@@ -1,6 +1,6 @@
 {
 	"name": "m3api-botpassword",
-	"version": "1.0.1",
+	"version": "1.0.2",
 	"description": "m3api extension package to authenticate using a bot password.",
 	"main": "index.js",
 	"type": "module",
